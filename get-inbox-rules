@@ -1,0 +1,2 @@
+Connect-ExchangeOnline [-UserPrincipalName <UPN>]
+Get-InboxRule -mailbox "user@domain.com" | Format-List
