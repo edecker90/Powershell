@@ -1,0 +1,1 @@
+Get-ChildItem -Path "D:\Shares" -Directory -Depth 1 | Get-NTFSAccess | Export-Csv -Path "C:\Temp\PermissionsReport.csv" -NoTypeInformation
