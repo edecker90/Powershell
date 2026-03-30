@@ -1,0 +1,6 @@
+	$OUPath = "OU=Groups,DC=example,DC=com"
+	$ExportPath = "C:\Temp\AllGroupMembers.csv"
+	Get-ADGroup -Filter * -SearchBase $OUPath | ForEach-Object {
+	    $Group = $_
+	    Get-ADGroupMember -Identity $Group | Select-Object @{Name='GroupName';Expression={$Group.Name}}, Name, SamAccountName, ObjectClass | Export-Csv -Path $ExportPath -NoTypeInformation -Append
+}
