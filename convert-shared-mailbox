@@ -1,0 +1,6 @@
+#Create a CSV titled "Email" and the list of emails to convert.
+
+$Mailboxes = Import-Csv "C:\path\to\csv\mailboxes.csv"
+foreach ($User in $Mailboxes) {
+    Set-Mailbox -Identity $User.Email -Type Shared
+}
