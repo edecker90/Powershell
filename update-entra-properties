@@ -1,0 +1,5 @@
+Connect-MgGraph -Scopes User.ReadWrite.All
+
+Import-Csv "C:\test.csv" | Foreach { 
+ Update-MgUser -UserId $_.id -OfficeLocation $_.officeLocation
+}
