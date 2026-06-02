@@ -1,0 +1,6 @@
+# Assign Licenses from CSV (export users from Entra)
+Connect-Graph -Scopes User.ReadWrite.All, Organization.Read.All
+$Sku = Get-MgSubscribedSku -All | Where SkuPartNumber -eq 'EXCHANGESTANDARD'
+Import-Csv "C:\temp\exch1.csv" | Foreach { 
+ Set-MgUserLicense -UserId $_.id -AddLicenses @{SkuId = $Sku.SkuId} -RemoveLicenses @()
+}
