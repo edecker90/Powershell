@@ -10,3 +10,14 @@ $Sku = Get-MgSubscribedSku -All | Where SkuPartNumber -eq 'EXCHANGESTANDARD'
 Import-Csv "C:\temp\exch1.csv" | Foreach { 
  Set-MgUserLicense -UserId $_.id -AddLicenses @{SkuId = $Sku.SkuId} -RemoveLicenses @()
 }
+
+Connect-MgGraph -Scopes User.ReadWrite.All,User-PasswordProfile.ReadWrite.All
+Import-Csv "C:\temp\nola.csv" | Foreach { 
+     $params = @{
+        PasswordProfile = @{
+            Password = $_.password
+            ForceChangePasswordNextSignIn = $true
+        } 
+    }
+     Update-MgUser -UserId $_.upn -PasswordProfile $params.PasswordProfile
+}
