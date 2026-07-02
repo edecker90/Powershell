@@ -4,11 +4,12 @@ Import-Csv "C:\test.csv" | Foreach {
  Update-MgUser -UserId $_.id -OfficeLocation $_.officeLocation -UsageLocation "US"
 }
 
-# Assign Licenses from CSV (export users from Entra)
+# Assign Licenses from CSV (export users from Entra) Will fail to add license if user does not have a removal, split up instead 
 Connect-Graph -Scopes User.ReadWrite.All, Organization.Read.All
-$Sku = Get-MgSubscribedSku -All | Where SkuPartNumber -eq 'EXCHANGESTANDARD'
-Import-Csv "C:\temp\exch1.csv" | Foreach { 
- Set-MgUserLicense -UserId $_.id -AddLicenses @{SkuId = $Sku.SkuId} -RemoveLicenses @()
+$Sku = Get-MgSubscribedSku -All | Where SkuPartNumber -eq 'O365_BUSINESS_PREMIUM'
+$RemoveSku = Get-MgSubscribedSku -All | Where SkuPartNumber -eq 'EXCHANGESTANDARD'
+Import-Csv "C:\temp\test.csv" | Foreach { 
+ Set-MgUserLicense -UserId $_.id -AddLicenses @{SkuId = $Sku.SkuId} -RemoveLicenses @($RemoveSku.SkuId)
 }
 
 Connect-MgGraph -Scopes User.ReadWrite.All,User-PasswordProfile.ReadWrite.All
