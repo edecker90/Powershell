@@ -5,3 +5,7 @@ Import-Csv "C:\temp\dl2.csv" | Foreach {
 Import-Csv "C:\temp\dl-members.csv" | Foreach { 
  Add-DistributionGroupMember -Identity $_.email -Member $_.member
 }
+
+Import-Csv "C:\temp\group_aliases.csv" | Foreach { 
+     Set-DistributionGroup -Identity $_.email -EmailAddresses @{Add=$_.alias}
+}
