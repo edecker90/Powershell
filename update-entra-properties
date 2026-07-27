@@ -9,7 +9,8 @@ Connect-Graph -Scopes User.ReadWrite.All, Organization.Read.All
 $Sku = Get-MgSubscribedSku -All | Where SkuPartNumber -eq 'O365_BUSINESS_PREMIUM'
 $RemoveSku = Get-MgSubscribedSku -All | Where SkuPartNumber -eq 'EXCHANGESTANDARD'
 Import-Csv "C:\temp\test.csv" | Foreach { 
- Set-MgUserLicense -UserId $_.id -AddLicenses @{SkuId = $Sku.SkuId} -RemoveLicenses @($RemoveSku.SkuId)
+ Set-MgUserLicense -UserId $_.id -AddLicenses @{SkuId = $Sku.SkuId} -RemoveLicenses @()
+ Set-MgUserLicense -UserId $_.id -AddLicenses @() -RemoveLicenses @($RemoveSku.SkuId)
 }
 
 Connect-MgGraph -Scopes User.ReadWrite.All,User-PasswordProfile.ReadWrite.All
