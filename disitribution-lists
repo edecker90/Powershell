@@ -9,3 +9,5 @@ Import-Csv "C:\temp\dl-members.csv" | Foreach {
 Import-Csv "C:\temp\group_aliases.csv" | Foreach { 
      Set-DistributionGroup -Identity $_.email -EmailAddresses @{Add=$_.alias}
 }
+
+Set-DistributionGroup -Identity $_.email -RequireSenderAuthenticationEnabled $false
