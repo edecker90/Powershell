@@ -1,0 +1,7 @@
+Import-Csv "C:\temp\dl2.csv" | Foreach { 
+ New-DistributionGroup -Name $_.name -PrimarySmtpAddress $_.email
+}
+
+Import-Csv "C:\temp\dl-members.csv" | Foreach { 
+ Add-DistributionGroupMember -Identity $_.email -Member $_.member
+}
