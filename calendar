@@ -1,0 +1,8 @@
+#Lists who owns the calendar, permissions, etc.
+Get-MailboxCalendarFolder -Identity "user@email.com:\Calendar\Subcalendar" | Format-List
+
+#Lists all calendars for a user
+Get-MailboxFolderStatistics -Identity "rob.craig@asisignage.com" -FolderScope Calendar | Select-Object Name, FolderPath, FolderType
+
+Add-MailboxFolderPermission -Identity "user@email.com:\Calendar\Subcalendar" -User "user2@email.com" -AccessRights Editor -SendNotificationToUser:$true
+Set-MailboxFolderPermission -Identity "user@email.com:\Calendar\Subcalendar" -User "user2@email.com" -AccessRights Owner
