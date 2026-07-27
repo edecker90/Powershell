@@ -3,3 +3,9 @@ Get-ChildItem -Path "D:\Shares" -Directory -Depth 1 | Get-NTFSAccess | Export-Cs
 
 
 Get-ChildItem -Path "D:\data" -recurse | Where-Object { $_.LastWriteTime -ge "05/01/2026" } | Select-Object FullName, CreationTime, LastAccessTime, LastWriteTime | Export-Csv -Path "C:\temp\files.csv" -NoTypeInformation
+
+Get-ChildItem -Path "D:\" -Directory -Depth 2 | ForEach-Object {
+    $Path = $_.FullName
+    Get-Acl $Path | Select-Object -ExpandProperty Access | 
+        Select-Object @{Name="Path"; Expression={$Path}}, IdentityReference, FileSystemRights, IsInherited
+} | Export-PST -Path "C:\temp\NTFSPermissions.csv" -NoTypeInformation
