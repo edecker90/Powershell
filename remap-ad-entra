@@ -1,0 +1,6 @@
+Get-ADUser -Identity user@domain.com
+# Grab "ObjectGUID" e.g. c97a6c98-ded8-472c-bfb6-87ed37d324f5
+[Convert]::ToBase64String([guid]::New("c97a6c98-ded8-472c-bfb6-87ed37d324f5").ToByteArray())
+# Run above in PS to create Base64 from GUID e.g. mGx6ydjeLEe/toftN9Mk9Q==
+Connect-MgGraph -Scopes "User.ReadWrite.All"
+Update-MgUser -UserId "user@domain.com" -OnPremisesImmutableId "mGx6ydjeLEe/toftN9Mk9Q=="
