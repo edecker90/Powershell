@@ -1,13 +1,30 @@
-$SiteURL = "https://asisignsystems-my.sharepoint.com/personal/kevin_hollenbach_asisignage_com"
-$FolderServerRelativeURL = "/Documents/_I2 Project"
- 
+$TargetUserEmail = "user@domain.com"
+$ListName = "Documents" # Default library name for OneDrive files
+$ListItems = Get-PnPListItem -List $ListName -PageSize 500
+$UniquePermissionCount = 0
+foreach ($Item in $ListItems) {
+    $HasUniquePerms = Get-PnPProperty -ClientObject $Item -Property "HasUniqueRoleAssignments"
+    if ($HasUniquePerms) {
+        $RoleAssignments = Get-PnPListItemPermission -List $ListName -Identity $Item.Id
+        foreach ($Role in $RoleAssignments) {
+            if ($Role.Principal.Email -eq $TargetUserEmail -or $Role.Principal.LoginName -like "*$TargetUserEmail*") {
+                $UniquePermissionCount++
+            }
+        }
+    }
+}
+Write-Host "Total unique permission items for $TargetUserEmail $UniquePermissionCount" -ForegroundColor Green
+
+
+-----------------------------------------
+
+
+$SiteURL = "https://domain-my.sharepoint.com/personal/user_name_domain_com"
+$FolderServerRelativeURL = "Documents"
 Connect-PnPOnline -Url $SiteURL -Interactive -ClientID xxx
-
 $Files = Get-PnPListItem -List $FolderServerRelativeURL -PageSize 500 | Where {$_.FileSystemObjectType -eq "File"}
-
 ForEach ($File in $Files)
 {
-    #Check If File has Unique Permissions
     $HasUniquePermissions = Get-PnPProperty -ClientObject $File -Property HasUniqueRoleAssignments
     If($HasUniquePermissions)
     {
