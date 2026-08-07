@@ -1,12 +1,9 @@
-$SiteURL = "https://asisignsystems-my.sharepoint.com/personal/lgnetworks_asisignage_com"  
-$FolderServerRelativeURL = "/Documents/test"  
+$SiteURL = "https://asisignsystems-my.sharepoint.com/personal/kevin_hollenbach_asisignage_com"
+$FolderServerRelativeURL = "/Documents/_I2 Project"
  
 Connect-PnPOnline -Url $SiteURL -Interactive -ClientID xxx
 
-$Folder = Get-PnPFolder -Url $FolderServerRelativeURL -Includes ListItemAllFields.ParentList  
-$ParentList = $Folder.ListItemAllFields.ParentList.Title  
-
-$Files = Get-PnPListItem -List $ParentList -FolderServerRelativeUrl $Folder.ServerRelativeUrl | Where {$_.FileSystemObjectType -eq "File"}
+$Files = Get-PnPListItem -List $FolderServerRelativeURL -PageSize 500 | Where {$_.FileSystemObjectType -eq "File"}
 
 ForEach ($File in $Files)
 {
