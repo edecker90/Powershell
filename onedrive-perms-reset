@@ -17,7 +17,7 @@ Write-Host "Total unique permission items for $TargetUserEmail $UniquePermission
 
 
 -----------------------------------------
-
+Get-PnPFolderItem -FolderSiteRelativeUrl "/Documents/personal Gdrive" -Recursive
 
 $SiteURL = "https://domain-my.sharepoint.com/personal/user_name_domain_com"
 $FolderServerRelativeURL = "Documents"
