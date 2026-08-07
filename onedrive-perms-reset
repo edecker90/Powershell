@@ -1,0 +1,22 @@
+$SiteURL = "https://asisignsystems-my.sharepoint.com/personal/lgnetworks_asisignage_com"  
+$FolderServerRelativeURL = "/Documents/test"  
+ 
+Connect-PnPOnline -Url $SiteURL -Interactive -ClientID xxx
+
+$Folder = Get-PnPFolder -Url $FolderServerRelativeURL -Includes ListItemAllFields.ParentList  
+$ParentList = $Folder.ListItemAllFields.ParentList.Title  
+
+$Files = Get-PnPListItem -List $ParentList -FolderServerRelativeUrl $Folder.ServerRelativeUrl | Where {$_.FileSystemObjectType -eq "File"}
+
+ForEach ($File in $Files)
+{
+    #Check If File has Unique Permissions
+    $HasUniquePermissions = Get-PnPProperty -ClientObject $File -Property HasUniqueRoleAssignments
+    If($HasUniquePermissions)
+    {
+        $File.ResetRoleInheritance()
+        $File.update()
+        Invoke-PnPQuery
+        Write-Host "Reset Unique Permissions on File $($File.FieldValues["FileRef"])" -ForegroundColor Green
+    }
+}
