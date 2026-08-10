@@ -1,9 +1,10 @@
 # GOOD
 $SiteURL = "https://domain-my.sharepoint.com/personal/user_name_domain_com"
 Connect-PnPOnline -Url $SiteURL -Interactive -ClientID xxx
-$Files = Get-PnPFolderItem -FolderSiteRelativeUrl "/Documents/folder" -Recursive | ForEach-Object {
-    Get-PnPFile -Url $_.ServerRelativeUrl -AsListItem | Where {$_.FileSystemObjectType -eq "File"}
-}
+$folderPath = "/personal/user_name_domain_com/Documents/"
+$items = Get-PnPListItem -List "Documents" -PageSize 2000
+$Files = $items | Where-Object { ( $_.FieldValues.FileDirRef -like "$folderPath*" ) -and ( $_.FileSystemObjectType -eq "File" ) }
+
 ForEach ($File in $Files)
 {
     $HasUniquePermissions = Get-PnPProperty -ClientObject $File -Property HasUniqueRoleAssignments
