@@ -1,3 +1,23 @@
+# GOOD
+$SiteURL = "https://domain-my.sharepoint.com/personal/user_name_domain_com"
+Connect-PnPOnline -Url $SiteURL -Interactive -ClientID xxx
+$Files = Get-PnPFolderItem -FolderSiteRelativeUrl "/Documents/folder" -Recursive | ForEach-Object {
+    Get-PnPFile -Url $_.ServerRelativeUrl -AsListItem | Where {$_.FileSystemObjectType -eq "File"}
+}
+ForEach ($File in $Files)
+{
+    $HasUniquePermissions = Get-PnPProperty -ClientObject $File -Property HasUniqueRoleAssignments
+    If($HasUniquePermissions)
+    {
+        $File.ResetRoleInheritance()
+        $File.update()
+        Invoke-PnPQuery
+        Write-Host "Reset Unique Permissions on File $($File.FieldValues["FileRef"])" -ForegroundColor Green
+    }
+}
+
+-------------------------------------------
+
 $TargetUserEmail = "user@domain.com"
 $ListName = "Documents" # Default library name for OneDrive files
 $ListItems = Get-PnPListItem -List $ListName -PageSize 500
