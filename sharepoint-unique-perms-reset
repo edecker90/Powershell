@@ -1,0 +1,19 @@
+# Or "https://<domain>.sharepoint.com/sites/<site>" for Sharepoint
+$SiteURL = "https://<domain>-my.sharepoint.com/personal/<user_name_domain_com>"
+# Must create Entra app, copy ClientID here
+Connect-PnPOnline -Url $SiteURL -Interactive -ClientID xxx
+# Or "/sites/<site>/Shared Documents/<subfolder>" for Sharepoint
+$folderPath = "/personal/user_name_domain_com/Documents/<subfolder>"
+$List = Get-PnPListItem -List "Documents" -PageSize 2000
+$Files = $List | Where-Object { ( $_.FieldValues.FileDirRef -like "$folderPath*" ) -and ( $_.FileSystemObjectType -eq "File" ) }
+ForEach ($File in $Files)
+{
+    $HasUniquePermissions = Get-PnPProperty -ClientObject $File -Property HasUniqueRoleAssignments
+    If($HasUniquePermissions)
+    {
+        $File.ResetRoleInheritance()
+        $File.update()
+        Invoke-PnPQuery
+        Write-Host "Reset Unique Permissions on File $($File.FieldValues["FileRef"])" -ForegroundColor Green
+    }
+}
