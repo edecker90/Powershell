@@ -14,7 +14,7 @@ ForEach ($File in $Files)
         $File.ResetRoleInheritance()
         $File.update()
         Invoke-PnPQuery
-        Write-Host "Reset Unique Permissions on file $($File.FieldValues["FileRef"])" -ForegroundColor Green
+        Write-Host "Reset Unique Permissions on file $($File.FieldValues["FileRef"])" -ForegroundColor DarkGreen
     }
     Else {
         Write-Host "Permissions already inherited for file $($File.FieldValues["FileRef"])"
