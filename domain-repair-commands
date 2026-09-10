@@ -1,3 +1,5 @@
 Test-ComputerSecureChannel -Repair -Credentials (Get-Credentials)
 
 Reset-ComputerMachinePassword
+
+Test-ComputerSecureChannel -Verbose
