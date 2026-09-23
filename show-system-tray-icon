@@ -1,0 +1,10 @@
+$ProgramName = "<EXECUTABLE NAME>.exe"
+$Setting = 0 or 1
+foreach ($GUID in (Get-ChildItem -Path 'HKCU:\Control Panel\NotifyIconSettings' -Name)) {
+    $ChildPath = "HKCU:\Control Panel\NotifyIconSettings\$($GUID)"
+    $Exec = (Get-ItemProperty -Path $ChildPath -Name ExecutablePath -ErrorAction SilentlyContinue).ExecutablePath
+    if ($Exec -match $ProgramName) {
+        $Current_State = (Get-ItemProperty -Path $ChildPath -Name IsPromoted).IsPromoted
+        Set-ItemProperty -Path $ChildPath -Name IsPromoted -Value $Setting
+    }
+}
